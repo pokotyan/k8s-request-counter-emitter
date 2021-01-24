@@ -32,6 +32,8 @@ make start_app
 
 ### socket.io サーバーの起動
 
+https://github.com/pokotyan/k8s-request-counter/blob/main/README.md
+
 ## Reference
 
 ### ブラウザ側への push 通知
