@@ -1,0 +1,12 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+      target: builder
+    volumes:
+      - ./:/app
+    command: go run main.go
+    ports:
+      - 8080:8080
