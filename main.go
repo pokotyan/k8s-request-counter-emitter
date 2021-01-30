@@ -43,6 +43,10 @@ func main ()  {
 			log.Fatalln("failed to listen network:", err)
 		}
 
+		if err := rdb.Publish(ctx, "READY_ON", os.Getenv("POD_NAME")).Err(); err != nil {
+			fmt.Println(err)
+		}
+
 		if err := srv.Serve(listener); err != http.ErrServerClosed {
 			// Error starting or closing listener:
 			log.Fatalln("Server closed with error:", err)
