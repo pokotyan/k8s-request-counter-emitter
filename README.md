@@ -14,6 +14,10 @@ $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/co
 
 パスワード設定まで行う
 
+### Argo Rollouts のインストール
+
+参考：https://argoproj.github.io/argo-rollouts/installation/
+
 ## Usage
 
 ### redis の起動

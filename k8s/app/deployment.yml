@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: app
 spec:
@@ -43,3 +43,17 @@ spec:
         - name: nginx-nginx-config
           configMap:
             name: nginx-nginx-configmap
+  strategy:
+    blueGreen:
+      # 本番アクセス用のServiceの名前
+      activeService: active-service
+      # Previewアクセス用のServiceの名前
+      previewService: preview-service
+      # 手動昇格の有無
+      autoPromotionEnabled: true
+      # オプション Preview環境限定でreplicasの上書き
+      previewReplicaCount: 1
+      # オプション ReplicaSetが準備完了になってから自動昇格するまでの時間
+      autoPromotionSeconds: 300
+      # オプション 新Verにルーティングを切り替えた後に旧VerのPodのスケールダウンを開始させるまでの時間
+      scaleDownDelaySeconds: 30
