@@ -3,7 +3,7 @@
 #	&& docker-compose -p test -f docker-compose_app.yml up --build
 
 start_app:
-	skaffold dev --port-forward -f k8s/app/skaffold.yml
+	skaffold dev --port-forward -f k8s/skaffold.yml
 
 start_redis:
 	kubectl apply -f k8s/redis/deployment.yml \
