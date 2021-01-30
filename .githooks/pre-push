@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+hash=$(git rev-parse HEAD)
+
+image="k8s-request-counter-emitter:$hash"
+
+docker build -t "$image" .
+
+yq e '.spec.template.spec.containers[1].image = '\""$image"\"'' -i ./k8s/app/deployment.yml
+
+git add ./k8s/app/deployment.yml
+
+git commit -m "update app image to $hash"
