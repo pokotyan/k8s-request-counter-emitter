@@ -1,0 +1,161 @@
+apiVersion: v1
+data:
+  default.conf: |-
+    server {
+        listen       80;
+        listen  [::]:80;
+        server_name  localhost;
+
+        location / {
+            proxy_pass   http://localhost:8080;
+        }
+    }
+kind: ConfigMap
+metadata:
+  name: nginx-default-configmap
+  namespace: default
+---
+apiVersion: v1
+data:
+  nginx.conf: |2-
+
+    user  nginx;
+    worker_processes  auto;
+
+    error_log   /dev/stderr  warn;
+    pid        /var/run/nginx.pid;
+
+    events {
+        worker_connections  1024;
+    }
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                          '$status $body_bytes_sent "$http_referer" '
+                          '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log  /dev/stdout  main;
+
+        sendfile        on;
+        #tcp_nopush     on;
+
+        keepalive_timeout  65;
+
+        #gzip  on;
+
+        include /etc/nginx/conf.d/*.conf;
+    }
+kind: ConfigMap
+metadata:
+  name: nginx-nginx-configmap
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: app
+  name: active-service
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: app
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: preview-service
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: app
+  type: NodePort
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: app
+  namespace: default
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: app
+  strategy:
+    blueGreen:
+      activeService: active-service
+      autoPromotionEnabled: true
+      autoPromotionSeconds: 300
+      previewReplicaCount: 1
+      previewService: preview-service
+      scaleDownDelaySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+      - command:
+        - /bin/bash
+        - -c
+        - nginx -g 'daemon off;'
+        image: nginx:1.19
+        name: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d/default.conf
+          name: nginx-default-config
+          subPath: default.conf
+        - mountPath: /etc/nginx/nginx.conf
+          name: nginx-nginx-config
+          subPath: nginx.conf
+      - command:
+        - ./main
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: k8s-request-counter-emitter:latest
+        imagePullPolicy: Never
+        name: app-container
+        ports:
+        - containerPort: 8080
+      volumes:
+      - configMap:
+          name: nginx-default-configmap
+        name: nginx-default-config
+      - configMap:
+          name: nginx-nginx-configmap
+        name: nginx-nginx-config
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/sslredirect: "false"
+  name: app-ingress
+  namespace: default
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: app-service
+          servicePort: 80
+        path: /

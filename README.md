@@ -8,6 +8,12 @@
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
+### kustomizeのインストール
+
+```
+brew install kustomize
+```
+
 ### ArgoCD のインストール
 
 参考：https://argoproj.github.io/argo-cd/getting_started/

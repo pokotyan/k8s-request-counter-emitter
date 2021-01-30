@@ -26,7 +26,7 @@ spec:
               mountPath: /etc/nginx/nginx.conf
               subPath: nginx.conf
         - name: app-container
-          image: k8s-request-counter-emitter:latest
+          image: app-image:latest
           command: ["./main"]
           imagePullPolicy: Never
           ports:

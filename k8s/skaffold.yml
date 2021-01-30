@@ -13,11 +13,8 @@ build:
   local:
     push: false
     useBuildkit: true
-deploy:
-  kubectl:
-    manifests:
-      - k8s/app/nginx-default-configmap.yml
-      - k8s/app/nginx-nginx-configmap.yml
-      - k8s/app/deployment.yml
-      - k8s/app/service.yml
-      - k8s/app/ingress.yml
+profiles:
+  - name: local
+    deploy:
+      kustomize:
+        paths: ["k8s/kustomize/overlays/local"]
