@@ -1,12 +1,5 @@
 ## Requirement
 
-### git hooks
-
-```
-git config core.hooksPath .githooks
-chmod a+x .githooks/pre-push
-```
-
 ### nginx ingress controller のインストール
 
 参考：https://kubernetes.github.io/ingress-nginx/deploy/#docker-for-mac
