@@ -68,7 +68,7 @@ argocd cluster add docker-desktop
 ```bash
 argocd app create k8s-request-counter-emitter \
 --repo https://github.com/pokotyan/k8s-request-counter-emitter \
---path k8s/app \
+--path k8s/kustomize/overlays/local \
 --dest-server https://kubernetes.default.svc \
 --dest-namespace default \
 --sync-policy automated \ # GitRepoを監視して変更があったら自動更新する設定
