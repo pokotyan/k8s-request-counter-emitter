@@ -9,3 +9,5 @@ kustomize edit set image app-image="${IMAGE_NAME}"
 kustomize build . >../../../manifest/app/app.yml
 
 git commit -am "Update image to $IMAGE_NAME"
+git pull
+git push origin main
