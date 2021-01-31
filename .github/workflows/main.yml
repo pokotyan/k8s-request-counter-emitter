@@ -19,8 +19,8 @@ jobs:
 
       - name: Build Image
         run: |-
-          docker build --tag "pokotyan/k8s-request-counter-emitter":"${GITHUB_REF##*/}" .
+          docker build --tag pokotyan/k8s-request-counter-emitter:${GITHUB_SHA} .
 
       - name: Push Image
         run: |-
-          docker push "pokotyan/k8s-request-counter-emitter":"${GITHUB_REF##*/}"
+          docker push pokotyan/k8s-request-counter-emitter:${GITHUB_SHA}
