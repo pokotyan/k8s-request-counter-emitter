@@ -8,15 +8,19 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Login to DockerHub
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: build image
+
+      - name: Build Image
         run: |-
           docker build --tag "pokotyan/k8s-request-counter-emitter":"${GITHUB_REF##*/}" .
-      - name: push image
+
+      - name: Push Image
         run: |-
           docker push "pokotyan/k8s-request-counter-emitter":"${GITHUB_REF##*/}"
