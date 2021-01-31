@@ -5,5 +5,5 @@ cd $(dirname $0)
 
 #IMAGE_NAME="$1"
 #kustomize edit set image app-image="${IMAGE_NAME}"
-kustomize edit set image app-image="k8s-request-counter-emitter:latest"
+kustomize edit set image app-image="pokotyan/k8s-request-counter-emitter:latest"
 kustomize build . >../../../manifest/app/app.yml

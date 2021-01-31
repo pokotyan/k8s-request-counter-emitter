@@ -4,7 +4,7 @@ metadata:
   name: app
 build:
   artifacts:
-    - image: k8s-request-counter-emitter
+    - image: pokoytan/k8s-request-counter-emitter
       context: ./
       docker:
         dockerfile: ./Dockerfile

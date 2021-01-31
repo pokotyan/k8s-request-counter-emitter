@@ -4,3 +4,5 @@ resources:
 - ../../base
 images:
 - name: app-image
+  newName: pokotyan/k8s-request-counter-emitter
+  newTag: latest
