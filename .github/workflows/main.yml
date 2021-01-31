@@ -14,12 +14,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          tag_with_sha: true
-          push: true
+      - name: build image
+        run: |-
+          docker build --tag "pokotyan/k8s-request-counter-emitter":"${GITHUB_REF##*/}" .
+      - name: push image
+        run: |-
+          docker push "pokotyan/k8s-request-counter-emitter":"${GITHUB_REF##*/}"
