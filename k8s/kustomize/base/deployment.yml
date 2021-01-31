@@ -28,7 +28,7 @@ spec:
         - name: app-container
           image: app-image:latest
           command: ["./main"]
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
