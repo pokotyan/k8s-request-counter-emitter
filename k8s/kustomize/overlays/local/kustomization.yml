@@ -5,4 +5,4 @@ resources:
 images:
 - name: app-image
   newName: pokotyan/k8s-request-counter-emitter
-  newTag: 35308ca6d3a5e3c91ad8154d7f944f34a96370df
+  newTag: 485a8779d2f06ab443122d300a984a4b54a51736
