@@ -83,6 +83,46 @@ spec:
     app: app
   type: NodePort
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis
+  name: redis-service
+  namespace: default
+spec:
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: 6379
+  selector:
+    app: redis
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - image: redis:6.0
+        name: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -129,7 +169,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: pokotyan/k8s-request-counter-emitter:485a8779d2f06ab443122d300a984a4b54a51736
+        image: pokotyan/k8s-request-counter-emitter:3530e9ab59ec2c1b292a30bdd96b3da6f91a5bf3
         imagePullPolicy: IfNotPresent
         name: app-container
         ports:
@@ -156,6 +196,6 @@ spec:
   - http:
       paths:
       - backend:
-          serviceName: app-service
+          serviceName: active-service
           servicePort: 80
         path: /
