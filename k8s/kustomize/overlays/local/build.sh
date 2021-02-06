@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# k8s-request-counter-emitter/k8s/kustomize/overlays/local にいる状態で実行する
+set -euo pipefail
+
 cd $(dirname $0)
 
 IMAGE_NAME="$1"

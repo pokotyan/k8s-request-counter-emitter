@@ -35,6 +35,13 @@ username: admin
 password: <設定したもの>
 ```
 
+### ArgoCD のコンソール確認
+
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+# ポートフォワード実行後、https://localhost:8080 にアクセスし、設定したパスワードでログイン
+```
+
 ### Argo Rollouts のインストール
 
 参考：https://argoproj.github.io/argo-rollouts/installation/
@@ -43,44 +50,17 @@ password: <設定したもの>
 
 ## Usage
 
-### サーバー、redis の起動
+### サーバー、redis の起動（skaffold）
 
 ```
 make start_app
 ```
 
-<!-- ### redis の起動
+### サーバー、redis の停止（skaffold）
 
-- 起動
+make start_app を Ctrl + C で止める
 
-```
-make start_redis
-```
-
-- redis をローカルホストで LISTEN させる(socket.io サーバーからアクセスできるようにするため)
-
-```
-kubectl port-forward svc/redis-service 6379:6379
-```
-
-### サーバーの起動
-
-```
-make start_app
-``` -->
-
-### socket.io サーバーの起動
-
-https://github.com/pokotyan/k8s-request-counter/blob/main/README.md
-
-### ArgoCD のコンソール確認
-
-```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-# ポートフォワード実行後、https://localhost:8080 にアクセスし、設定したパスワードでログイン
-```
-
-### ArgoCD の アプリケーションの create
+### サーバー、redis の起動（ArgoCD による監視）
 
 ```
 argocd cluster add docker-desktop
@@ -97,9 +77,21 @@ argocd app create k8s-request-counter-emitter \
 --self-heal
 ```
 
+ArgoCD によるリポジトリの監視で、アプリを起動する場合は redis のポートフォワードがされてないので手動でする
+
+```
+kubectl port-forward svc/redis-service 6379:6379
+```
+
+### サーバー、redis の停止（ArgoCD による監視）
+
+```
+argocd app delete k8s-request-counter-emitter
+```
+
 ### ArgoCD の アプリケーションの sync
 
-※ArgoCD のコンソール上ででポチる or リポジトリへの push でも sync される
+※ArgoCD のコンソール上でポチる or リポジトリへの push でも sync される
 
 ```
 argocd app sync k8s-request-counter-emitter
@@ -119,6 +111,10 @@ kubectl argo rollouts get rollout app --watch --cluster docker-desktop
 argocd app get k8s-request-counter-emitter
 ```
 
+### フロントエンド、socket.io サーバーの起動
+
+https://github.com/pokotyan/k8s-request-counter/blob/main/README.md
+
 ## Reference
 
 ### ブラウザ側への push 通知
@@ -135,4 +131,10 @@ curl http://localhost/publish
 
 ```
 kubectl delete pod <pod_name>
+```
+
+- pod の停止
+
+```
+make delete_pods
 ```
