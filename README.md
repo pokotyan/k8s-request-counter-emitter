@@ -8,7 +8,17 @@
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
+### skaffold のインストール
+
+参考：https://skaffold.dev/docs/install/
+
+```
+brew install skaffold
+```
+
 ### kustomize のインストール
+
+参考：https://kubectl.docs.kubernetes.io/installation/kustomize/homebrew/
 
 ```
 brew install kustomize
@@ -19,6 +29,11 @@ brew install kustomize
 参考：https://argoproj.github.io/argo-cd/getting_started/
 
 パスワード設定まで行う
+
+```
+username: admin
+password: <設定したもの>
+```
 
 ### Argo Rollouts のインストール
 
@@ -62,10 +77,10 @@ https://github.com/pokotyan/k8s-request-counter/blob/main/README.md
 
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8080:443
-# ポートフォワード実行後、https://localhost:8080 にアクセス
+# ポートフォワード実行後、https://localhost:8080 にアクセスし、設定したパスワードでログイン
 ```
 
-### ArgoCD の sync
+### ArgoCD の アプリケーションの create
 
 ```
 argocd cluster add docker-desktop
@@ -77,10 +92,14 @@ argocd app create k8s-request-counter-emitter \
 --path k8s/kustomize/overlays/local \
 --dest-server https://kubernetes.default.svc \
 --dest-namespace default \
---sync-policy automated \ # GitRepoを監視して変更があったら自動更新する設定
+--sync-policy automated \ # GitRepoを監視して変更があったら自動更新する
 --auto-prune \
 --self-heal
 ```
+
+### ArgoCD の アプリケーションの sync
+
+※ArgoCD のコンソール上ででポチる or リポジトリへの push でも sync される
 
 ```
 argocd app sync k8s-request-counter-emitter
