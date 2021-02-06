@@ -66,6 +66,8 @@ make start_app を Ctrl + C で止める
 argocd cluster add docker-desktop
 ```
 
+ArgoCD のアプリケーションの作成は GUI 上でポチるか、 argocd app create コマンドを用いるか、マニフェストを登録するかで作れる
+
 ```bash
 argocd app create k8s-request-counter-emitter \
 --repo https://github.com/pokotyan/k8s-request-counter-emitter \
@@ -75,6 +77,12 @@ argocd app create k8s-request-counter-emitter \
 --sync-policy automated \ # GitRepoを監視して変更があったら自動更新する
 --auto-prune \
 --self-heal
+```
+
+or 
+
+```
+kubectl apply -f k8s/manifest/argo
 ```
 
 ArgoCD によるリポジトリの監視で、アプリを起動する場合は redis のポートフォワードがされてないので手動でする

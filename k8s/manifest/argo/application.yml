@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-request-counter-emitter
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/pokotyan/k8s-request-counter-emitter
+    targetRevision: HEAD
+    path: k8s/kustomize/overlays/local
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
