@@ -8,7 +8,7 @@
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.43.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
-### kustomizeのインストール
+### kustomize のインストール
 
 ```
 brew install kustomize
@@ -28,7 +28,13 @@ brew install kustomize
 
 ## Usage
 
-### redis の起動
+### サーバー、redis の起動
+
+```
+make start_app
+```
+
+<!-- ### redis の起動
 
 - 起動
 
@@ -46,13 +52,13 @@ kubectl port-forward svc/redis-service 6379:6379
 
 ```
 make start_app
-```
+``` -->
 
 ### socket.io サーバーの起動
 
 https://github.com/pokotyan/k8s-request-counter/blob/main/README.md
 
-### ArgoCD のコンソール起動
+### ArgoCD のコンソール確認
 
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8080:443
@@ -80,10 +86,18 @@ argocd app create k8s-request-counter-emitter \
 argocd app sync k8s-request-counter-emitter
 ```
 
+### ArgoCD の 状態確認
+
 ロールアウトの観察
 
 ```
 kubectl argo rollouts get rollout app --watch --cluster docker-desktop
+```
+
+アプリの確認
+
+```
+argocd app get k8s-request-counter-emitter
 ```
 
 ## Reference
