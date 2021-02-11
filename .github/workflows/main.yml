@@ -41,6 +41,12 @@ jobs:
           git config --local user.email "tomohiro_soga@yahoo.co.jp"
           git config --local user.name "pokotyan"
 
+      - name: Set up kubeval
+        run: |-
+          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          sudo cp kubeval /usr/local/bin
+
       - name: Commit after Build manifest
         run: |
           bash ./k8s/kustomize/overlays/local/build.sh pokotyan/k8s-request-counter-emitter:${GITHUB_SHA}
