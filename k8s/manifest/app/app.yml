@@ -169,7 +169,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        image: pokotyan/k8s-request-counter-emitter:74ee1e5b501aaee17d4dec97a8b4a79d702370f4
+        image: pokotyan/k8s-request-counter-emitter:95fcc68cacc0f5967b6c05da393f5d632946353d
         imagePullPolicy: IfNotPresent
         name: app-container
         ports:
