@@ -15,7 +15,7 @@ spec:
             - /bin/bash
             - -c
             - |
-              curl -X POST --data-urlencode payload={\"channel\": \"#gitops\", \"username\": \"hello\", \"text\": \"App Sync succeeded\", \"icon_emoji\": \":ghost:\"} ${SLACK_WEBHOOK_URL}
+              curl -X POST --data-urlencode "payload={\"channel\": \"#gitops\", \"username\": \"hello\", \"text\": \"App Sync succeeded\", \"icon_emoji\": \":ghost:\"}" ${SLACK_WEBHOOK_URL}
           env:
             - name: SLACK_WEBHOOK_URL
               valueFrom:
